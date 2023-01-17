@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "./App.css";
-import pokemon from "./pokemon.json";
 
 const PokemonRow = ({ pokemon, onSelect }) => (
   <tr>
@@ -57,7 +56,16 @@ PokemonInfo.propTypes = {
 
 function App() {
   const [filter, filterSet] = React.useState(""); // Sökfilter
+  const [pokemon, pokemonSet] = React.useState([]);
   const [selectedItem, selectedItemSet] = React.useState(null);
+
+  React.useEffect(() => {
+    // Laddar json till från backend till frontend
+    fetch("http://localhost:3000/reacttest/pokemon.json")
+      .then((resp) => resp.json())
+      .then((data) => pokemonSet(data));
+  }, []);
+
   return (
     <div
       style={{
@@ -91,7 +99,7 @@ function App() {
                     .toLowerCase()
                     .includes(filter.toLocaleLowerCase())
                 ) //sökfilter
-                .slice(0, 20)
+                .slice(0, 151)
                 .map((pokemon) => (
                   <PokemonRow
                     pokemon={pokemon}
