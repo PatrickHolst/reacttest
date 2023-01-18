@@ -1,68 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import { Button, CssBaseline } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 
 import "./App.css";
 
-const PokemonType = PropTypes.shape({
-  id: PropTypes.string.isRequired,
-  name: PropTypes.shape({
-    english: PropTypes.string.isRequired,
-    japanese: PropTypes.string.isRequired,
-    chinese: PropTypes.string.isRequired,
-    french: PropTypes.string.isRequired,
-  }),
-  type: PropTypes.arrayOf(PropTypes.string.isRequired),
-  base: PropTypes.shape({
-    HP: PropTypes.number.isRequired,
-    Attack: PropTypes.number.isRequired,
-    Defense: PropTypes.number.isRequired,
-    "Sp. Attack": PropTypes.number.isRequired,
-    "Sp. Defense": PropTypes.number.isRequired,
-    Speed: PropTypes.number.isRequired,
-  }),
-});
-
-const PokemonRow = ({ pokemon, onClick }) => (
-  <>
-    <tr key={pokemon.id}>
-      <td>{pokemon.name.english}</td>
-      <td>{pokemon.type.join(", ")}</td>
-      <td>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => onClick(pokemon)}
-        >
-          More Information
-        </Button>
-      </td>
-    </tr>
-  </>
-);
-
-PokemonRow.propTypes = {
-  pokemon: PropTypes.arrayOf(PokemonType),
-};
-
-const PokemonInfo = ({ name: { english }, base }) => (
-  <div>
-    <h2>{english}</h2>
-    <table>
-      <tbody>
-        {Object.keys(base).map((key) => (
-          <tr key={key}>
-            <td>{key}</td>
-            <td>{base[key]}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
-
-PokemonInfo.propTypes = PokemonType;
+import PokemonType from "./PokemonType";
+import PokemonRow from "./compontents/PokemonRow";
+import PokemonInfo from "./compontents/PokemonInfo";
 
 const Title = styled.h1`
   text-align: center;
