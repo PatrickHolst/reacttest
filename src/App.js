@@ -84,53 +84,86 @@ const Input = styled.input`
   padding: 0.2rem;
 `;
 
-function App() {
-  const [filter, filterSet] = React.useState(""); // Sökfilter
-  const [pokemon, pokemonSet] = React.useState([]);
-  const [selectedItem, selectedItemSet] = React.useState(null);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filter: "",
+      pokemon: [],
+      selectedItem: null,
+    };
+  }
 
-  React.useEffect(() => {
-    // Laddar json till från backend till frontend
+  componentDidMount() {
     fetch("http://localhost:3000/reacttest/pokemon.json")
       .then((resp) => resp.json())
-      .then((data) => pokemonSet(data));
-  }, []);
+      .then((pokemon) =>
+        this.setState({
+          ...this.state,
+          pokemon,
+        })
+      );
+  }
 
-  return (
-    <Container>
-      <Title>Pokemon Search</Title>
-      <TwoColumnLayout>
-        <Input value={filter} onChange={(evt) => filterSet(evt.target.value)} />
-        <div>
-          <table width="100%">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pokemon
-                .filter((pokemon) =>
-                  pokemon.name.english
-                    .toLowerCase()
-                    .includes(filter.toLocaleLowerCase())
-                ) //sökfilter
-                .slice(0, 151)
-                .map((pokemon) => (
-                  <PokemonRow
-                    pokemon={pokemon}
-                    key={pokemon.id}
-                    onSelect={(pokemon) => selectedItemSet(pokemon)}
-                  />
-                ))}
-            </tbody>
-          </table>
-        </div>
-        {selectedItem && <PokemonInfo {...selectedItem} />}
-      </TwoColumnLayout>
-    </Container>
-  );
+  render() {
+    return (
+      <Container>
+        <Title>Pokemon Search</Title>
+        <TwoColumnLayout>
+          <Input
+            value={this.state.filter}
+            onChange={(evt) =>
+              this.setState({
+                ...this.state,
+                filter: evt.target.value,
+              })
+            }
+          />
+          <div>
+            <table width="100%">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.pokemon
+                  .filter((pokemon) =>
+                    pokemon.name.english
+                      .toLowerCase()
+                      .includes(this.state.filter.toLocaleLowerCase())
+                  ) //sökfilter
+                  .slice(0, 151)
+                  .map((pokemon) => (
+                    <PokemonRow
+                      pokemon={pokemon}
+                      key={pokemon.id}
+                      onSelect={(pokemon) =>
+                        this.state({
+                          ...this.state,
+                          selectedItem: pokemon,
+                        })
+                      }
+                    />
+                  ))}
+              </tbody>
+            </table>
+          </div>
+          {this.state.selectedItem && (
+            <PokemonInfo {...this.state.selectedItem} />
+          )}
+        </TwoColumnLayout>
+      </Container>
+    );
+  }
 }
+
+// React.useEffect(() => {
+//   // Laddar json till från backend till frontend
+//   fetch("http://localhost:3000/reacttest/pokemon.json")
+//     .then((resp) => resp.json())
+//     .then((data) => pokemonSet(data));
+// }, []);
 
 export default App;
