@@ -1,8 +1,6 @@
 import React from "react";
-import { PropTypes } from "@material-ui/core";
+import PropTypes from "prop-types";
 import { Button } from "@material-ui/core";
-
-import "./App.css";
 
 import PokemonType from "../PokemonType";
 

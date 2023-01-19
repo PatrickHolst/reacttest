@@ -4,9 +4,11 @@ import { CssBaseline } from "@material-ui/core";
 
 import "./App.css";
 
-import PokemonType from "./PokemonType";
 import PokemonRow from "./compontents/PokemonRow";
 import PokemonInfo from "./compontents/PokemonInfo";
+import PokemonFilter from "./compontents/PokemonFilter";
+import PokemonTable from "./compontents/PokemonTable";
+import PokemonContext from "./PokemonContext";
 
 const Title = styled.h1`
   text-align: center;
@@ -20,11 +22,6 @@ const TwoColumnLayout = styled.div`
   display: grid;
   grid-template-columns: 80% 20%;
   grid-column-gap: 1rem;
-`;
-const Input = styled.input`
-  width: 100%;
-  padding: 0.2rem;
-  font-size: large;
 `;
 
 function App() {
@@ -43,37 +40,28 @@ function App() {
   }
 
   return (
-    <PageContainer>
-      <CssBaseline />
-      <Title>Pokemon Search</Title>
-      <TwoColumnLayout>
-        <div>
-          <Input
-            type="text"
-            value={filter}
-            onChange={(evt) => filterSet(evt.target.value)}
-          />
-          <table width="100%">
-            <tbody>
-              {pokemon
-                .filter(({ name: { english } }) =>
-                  english
-                    .toLocaleLowerCase()
-                    .includes(filter.toLocaleLowerCase())
-                )
-                .slice(0, 20)
-                .map((pokemon) => (
-                  <PokemonRow
-                    pokemon={pokemon}
-                    onClick={(pokemon) => selectedPokemonSet(pokemon)}
-                  />
-                ))}
-            </tbody>
-          </table>
-        </div>
-        {selectedPokemon && <PokemonInfo {...selectedPokemon} />}
-      </TwoColumnLayout>
-    </PageContainer>
+    <PokemonContext.Provider
+      value={{
+        filter,
+        pokemon,
+        selectedPokemon,
+        filterSet,
+        pokemonSet,
+        selectedPokemonSet,
+      }}
+    >
+      <PageContainer>
+        <CssBaseline />
+        <Title>Pokemon Search</Title>
+        <TwoColumnLayout>
+          <div>
+            <PokemonFilter />
+            <PokemonTable />
+          </div>
+          <PokemonInfo />
+        </TwoColumnLayout>
+      </PageContainer>
+    </PokemonContext.Provider>
   );
 }
 
