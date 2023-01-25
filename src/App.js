@@ -2,13 +2,12 @@ import React from "react";
 import styled from "@emotion/styled";
 import { CssBaseline } from "@material-ui/core";
 
-import "./App.css";
-
-import PokemonRow from "./compontents/PokemonRow";
 import PokemonInfo from "./compontents/PokemonInfo";
+import PokemonContext from "./PokemonContext";
 import PokemonFilter from "./compontents/PokemonFilter";
 import PokemonTable from "./compontents/PokemonTable";
-import PokemonContext from "./PokemonContext";
+
+import "./App.css";
 
 const Title = styled.h1`
   text-align: center;
@@ -24,30 +23,55 @@ const TwoColumnLayout = styled.div`
   grid-column-gap: 1rem;
 `;
 
+const stateReducer = (state, { type, payload }) => {
+  switch (type) {
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: payload,
+      };
+    case "SET_POKEMON":
+      return {
+        ...state,
+        pokemon: payload,
+      };
+    case "SET_SELECTED_POKEMON":
+      return {
+        ...state,
+        selectedPokemon: payload,
+      };
+    default:
+      throw new Error();
+  }
+};
+
 function App() {
-  const [filter, filterSet] = React.useState("");
-  const [pokemon, pokemonSet] = React.useState(null);
-  const [selectedPokemon, selectedPokemonSet] = React.useState(null);
+  const [state, dispatch] = React.useReducer(stateReducer, {
+    filter: "",
+    pokemon: [],
+    selectedPokemon: null,
+  });
 
   React.useEffect(() => {
     fetch("/reacttest/pokemon.json")
       .then((resp) => resp.json())
-      .then((data) => pokemonSet(data));
+      .then((payload) =>
+        dispatch({
+          type: "SET_POKEMON",
+          payload,
+        })
+      );
   }, []);
 
-  if (!pokemon) {
+  if (!state.pokemon) {
     return <div>Loading data</div>;
   }
 
   return (
     <PokemonContext.Provider
       value={{
-        filter,
-        pokemon,
-        selectedPokemon,
-        filterSet,
-        pokemonSet,
-        selectedPokemonSet,
+        state,
+        dispatch,
       }}
     >
       <PageContainer>

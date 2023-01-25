@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
+
 import PokemonContext from "../PokemonContext";
-import PokemonType from "../PokemonType";
 
 const PokemonInfo = () => {
-  const { selectedPokemon } = useContext(PokemonContext);
+  const {
+    state: { selectedPokemon },
+  } = useContext(PokemonContext);
 
   return selectedPokemon ? (
     <div>
@@ -21,7 +23,5 @@ const PokemonInfo = () => {
     </div>
   ) : null;
 };
-
-PokemonInfo.propTypes = PokemonType;
 
 export default PokemonInfo;
