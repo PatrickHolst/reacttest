@@ -15,7 +15,7 @@ function PokemonTable() {
           .filter(({ name: { english } }) =>
             english.toLocaleLowerCase().includes(filter.toLocaleLowerCase())
           )
-          .slice(0, 20)
+          .slice(0, 151)
           .map((pokemon) => (
             <PokemonRow
               pokemon={pokemon}

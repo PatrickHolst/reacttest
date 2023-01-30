@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { CssBaseline } from "@material-ui/core";
+import "./App.css";
 
 import PokemonInfo from "./compontents/PokemonInfo";
-import PokemonContext from "./PokemonContext";
 import PokemonFilter from "./compontents/PokemonFilter";
 import PokemonTable from "./compontents/PokemonTable";
 
-import "./App.css";
+import PokemonContext from "./PokemonContext";
 
 const Title = styled.h1`
   text-align: center;
@@ -41,7 +41,7 @@ const stateReducer = (state, { type, payload }) => {
         selectedPokemon: payload,
       };
     default:
-      throw new Error();
+      return state;
   }
 };
 
@@ -55,10 +55,10 @@ function App() {
   React.useEffect(() => {
     fetch("/reacttest/pokemon.json")
       .then((resp) => resp.json())
-      .then((payload) =>
+      .then((data) =>
         dispatch({
           type: "SET_POKEMON",
-          payload,
+          payload: data,
         })
       );
   }, []);
